@@ -1,0 +1,11 @@
+## Xcode user settings
+xcuserdata/
+*.sublime-project
+
+## Build generated files to ignore
+build/
+DerivedData/
+.build/
+
+## Testing
+*.xcresult
