@@ -6,6 +6,7 @@
 //
 
 let oppDirections: [Directions: Directions] = [.north: .south, .east: .west, .south: .north, .west: .east];
+
 let dirEncoding: [Directions: Position] = [.north: Position(x: 0, y: 1), .east: Position(x: 1, y: 0), .south: Position(x: 0, y: -1), .west: Position(x: -1, y: 0)];
 
 enum Directions : CaseIterable {
@@ -32,9 +33,11 @@ struct MazeNode {
     var walls: [Directions: Bool] = [.north: true, .east: true, .south: true, .west: true];
     
     var letters: [String] = [];
-    
-    // Will mark it as falls through the first pass, then true as they are queued for visualization
-    var visualized: Bool = true;
     var pos: Position;
+    
+    // Will mark it as false through the first pass of the maze generation
+    // for the backtracking toggle, then true as they are queued for visualization.
+    // Will manually set to false for the frontend nodes that aren't visualized yet
+    var visualized: Bool = true;
     
 }
