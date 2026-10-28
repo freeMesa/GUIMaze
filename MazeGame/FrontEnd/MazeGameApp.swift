@@ -11,7 +11,7 @@ import SwiftUI
 struct MazeGameApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
-        }
+            ParentView()
+        }.defaultSize(width: 1500, height: 1000)
     }
 }
