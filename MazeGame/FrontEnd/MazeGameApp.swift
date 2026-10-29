@@ -12,6 +12,6 @@ struct MazeGameApp: App {
     var body: some Scene {
         WindowGroup {
             ParentView()
-        }.defaultSize(width: 1500, height: 1000)
+        }
     }
 }

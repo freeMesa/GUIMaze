@@ -26,26 +26,47 @@ struct ParentView: View {
     }
 }
 
+extension GraphicsContext {
+    func drawMazeCell(walls: [Directions: Bool], pos: CGRect, path: Path){
+        
+        // TODO: Define drawing of cell
+    }
+}
 
 struct StaticDetailView: View {
     @State private var volume = 0.5
     @State private var showSlider = false
     var body: some View {
-        ScrollView{
-            VStack {
+            ZStack {
+                
                 Canvas { context, size in
                     let gridSpacing: CGFloat = 30.0
                     var path = Path()
+                    
+                    let worldWidth: CGFloat = 1200
+                    let worldHeight: CGFloat = 1200
+                    
+                    let scaleX = size.width / worldWidth
+                    let scaleY = size.height / worldHeight
+                    let fitScale = min(scaleX, scaleY) - 0.05
+                    
+                    let remainingWidth = size.width - worldWidth * fitScale
+                    let remainingHeight = size.height - worldHeight * fitScale
+                    
+                    context.translateBy(x: remainingWidth / 2, y: remainingHeight / 2)
+                    
+                    context.scaleBy(x: fitScale, y: fitScale)
+                    
                     // 1. Draw Vertical Lines
-                    for x in stride(from: 0, through: size.width, by: gridSpacing) {
+                    for x in stride(from: 0, through: worldWidth, by: gridSpacing) {
                         path.move(to: CGPoint(x: x, y: 0))
-                        path.addLine(to: CGPoint(x: x, y: size.height))
+                        path.addLine(to: CGPoint(x: x, y: worldHeight))
                     }
                     
                     // 2. Draw Horizontal Lines
-                    for y in stride(from: 0, through: size.height, by: gridSpacing) {
+                    for y in stride(from: 0, through: worldHeight, by: gridSpacing) {
                         path.move(to: CGPoint(x: 0, y: y)) // Note: Ensure x is 0, y is y
-                        path.addLine(to: CGPoint(x: size.width, y: y))
+                        path.addLine(to: CGPoint(x: worldWidth, y: y))
                     }
                     
                     // 3. Render the full path onto the canvas context
@@ -55,14 +76,11 @@ struct StaticDetailView: View {
                         lineWidth: 1.0
                     )
                 }
-                .containerRelativeFrame(.horizontal)
-                .containerRelativeFrame(.vertical)
                 .background(Color(.systemGray))
                 
-                
-            }
-            .containerRelativeFrame(.horizontal)
-            .containerRelativeFrame(.vertical)
+                HStack{
+                    Text("Something").position()
+                }
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {

@@ -10,9 +10,10 @@ import Foundation
 struct SeededRandomGenerator: RandomNumberGenerator {
     var state: UInt64
 
-    init(seed: UInt64) {
+    init(seed: Int) {
         // A seed of 0 can stall some generators fallback to a default
-        self.state = seed == 0 ? 5489 : seed
+        let bitPatternSeed = UInt64(bitPattern: Int64(seed))
+        self.state = bitPatternSeed == 0 ? 5489 : bitPatternSeed
     }
 
     /// Mutates the state and returns the next uniform pseudo-random UInt64
@@ -23,12 +24,14 @@ struct SeededRandomGenerator: RandomNumberGenerator {
         return state
     }
     
-    mutating func nextRange(min: UInt64, max: UInt64) -> UInt64 { // Fix: bounds checking to safely convert from UInt
+    mutating func nextRange(min: Int, max: Int) -> Int { // Fix: bounds checking to safely convert from UInt
+        guard min <= max else { return min }
         
-        var range = max - min + 1
+        let range = UInt64(max - min + 1)
+        let offset = next() % range
         
         // Not truly random but good enough
-        return min + ( next() % range )
+        return min + Int(offset)
     }
 }
 
@@ -37,7 +40,7 @@ class LogicMaze {
     
     var maze: [[MazeNode]] = [] // TODO: Initialize in init
     var playerPos: Position = Position(x: -1, y: 0)
-    let seed: UInt64 // TODO: Initialize in init
+    let seed: Int // TODO: Initialize in init
     
     var steps: Int = 0
     var lettersFound: [Character] = [] // TODO: Initialize in init
@@ -47,11 +50,11 @@ class LogicMaze {
     private var nodesToVisualize: [MazeNode] = [] // Treat it like a stack
     private var rndGen: SeededRandomGenerator // TODO: Initialize in init
     
-    init(seed: UInt64){
+    init(seed: Int){
         // Initialization
         let generator = SeededRandomGenerator(seed: seed)
         self.rndGen = generator
-        self.seed = generator.state
+        self.seed = seed
         
         // Calling of the setup function
         self.generateMaze()
@@ -60,7 +63,7 @@ class LogicMaze {
     private func generateMaze() {
         // TODO: Backtracking algorithm
         
-        var size = Int(rndGen.nextRange(min: 16, max: 20)) // Can define these later
+        let size = rndGen.nextRange(min: 16, max: 20) // Can define these later
                 
         maze = (0..<size).map { rowIndex in // Blank maze
             (0..<size).map { colIndex in
