@@ -82,7 +82,7 @@ class LogicMaze {
         return isGuessAllowed() ? word.compare(guess, options: [.caseInsensitive]) == .orderedSame : false
     }
     
-    func reset(seed: UInt64){
+    func reset(seed: Int){
         // TODO: reset all values (mainly seed)
         
         // TODO; reset game state values

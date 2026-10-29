@@ -10,13 +10,20 @@ import Testing
 
 struct MazeGameTests {
 
-    @Test func example() async throws {
+    @Test("Making sure the maze is connected.", arguments: [256, 800, 1565, 10000234, 32473])
+    func mazeSolvable(seed: Int) {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.
         // Swift Testing Documentation
         // https://developer.apple.com/documentation/testing
         
         
-        let a  = 2
+        // TODO: Test that all nodes are reachable
+    }
+    
+    @Test("Testing the equivilence under same seeding.", arguments: [256, 800, 1565, 10000234, 32473])
+    func mazeEquivilence(seed: Int) {
+        
+        // TODO: Create two mazes and test that they are equivilent with the same seed
     }
 
 }
