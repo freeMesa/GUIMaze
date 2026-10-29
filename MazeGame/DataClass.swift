@@ -33,7 +33,7 @@ struct MazeNode {
     var walls: [Directions: Bool] = [.north: true, .east: true, .south: true, .west: true]
     
     var letters: [String] = []
-    var pos: Position
+    var pos: Position = Position(x: -1, y: -1)
     
     // Will mark it as false through the first pass of the maze generation
     // for the backtracking toggle, then true as they are queued for visualization.
