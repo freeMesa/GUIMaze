@@ -20,6 +20,7 @@ final class MazeGameUITests: XCTestCase {
 
     override func tearDownWithError() throws {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        let q = 2
     }
 
     @MainActor
@@ -30,6 +31,9 @@ final class MazeGameUITests: XCTestCase {
 
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         // XCUIAutomation Documentation
+        app.activate()
+        app/*@START_MENU_TOKEN@*/.buttons["_XCUI:CloseWindow"]/*[[".windows.buttons[\"_XCUI:CloseWindow\"]",".buttons[\"_XCUI:CloseWindow\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.click()
+        
         // https://developer.apple.com/documentation/xcuiautomation
     }
 
