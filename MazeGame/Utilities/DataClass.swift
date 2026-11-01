@@ -7,7 +7,7 @@
 
 let oppDirections: [Directions: Directions] = [.north: .south, .east: .west, .south: .north, .west: .east]
 
-let dirEncoding: [Directions: Position] = [.north: Position(x: 0, y: 1), .east: Position(x: 1, y: 0), .south: Position(x: 0, y: -1), .west: Position(x: -1, y: 0)]
+let dirEncoding: [Directions: Position] = [.north: Position(x: 0, y: -1), .east: Position(x: 1, y: 0), .south: Position(x: 0, y: 1), .west: Position(x: -1, y: 0)]
 
 enum Directions : CaseIterable {
     case north

@@ -5,12 +5,14 @@
 //  Created by Kaid Malone on 10/22/26.
 //
 import Observation
+import Foundation
 
 @Observable
 class LogicMaze {
     
     var maze: [[MazeNode]] = [] // TODO: Initialize in init
-    var playerPos: Position = Position(x: -1, y: 0)
+    var playerPos: Position = Position(x: -1, y: -1)
+    var isPlayerStart: Bool = true
     let seed: Int // TODO: Initialize in init
     
     var steps: Int = 0
@@ -21,11 +23,12 @@ class LogicMaze {
     private var nodesToVisualize: [MazeNode] = [] // Treat it like a stack
     private var rndGen: SeededRandomGenerator // TODO: Initialize in init
     
-    init(seed: Int){
+    init(seedInput: Int){
         // Initialization
-        let generator = SeededRandomGenerator(seed: seed)
+        let generator = SeededRandomGenerator(seed: seedInput)
         self.rndGen = generator
-        self.seed = seed
+        self.seed = seedInput
+        
         
         // Calling of the setup function
         self.generateMaze()
@@ -35,8 +38,10 @@ class LogicMaze {
         // TODO: Backtracking algorithm
         
         let size = rndGen.nextRange(min: 16, max: 20) // Can define these later
-                
-        maze = (0..<size).map { rowIndex in // Blank maze
+        
+        self.playerPos = Position(x: -1, y: size - 1)
+        
+        self.maze = (0..<size).map { rowIndex in // Blank maze
             (0..<size).map { colIndex in
                 var node = MazeNode()
                 node.pos = Position(x: colIndex, y: size - rowIndex - 1)
@@ -45,8 +50,22 @@ class LogicMaze {
         }
         
         // TODO: Backtracking algorithm
+        var currX = rndGen.nextRange(min: 0, max: size - 1)
+        var currY = rndGen.nextRange(min: 0, max: size - 1)
         
+        var currNode = self.maze[currY][currX]
+        currNode.visualized = false
         
+        var stack: [MazeNode] = [currNode]
+        var nextNode: MazeNode
+        while(!stack.isEmpty){
+            let currPos: Position? = stack.last?.pos
+            var newDirections: [Directions] = []
+            
+            for (dir, pos) in dirEncoding{
+                
+            }
+        }
     }
     
     func move(dir: Directions) -> Bool {
