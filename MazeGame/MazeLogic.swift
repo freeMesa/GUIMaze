@@ -120,6 +120,16 @@ class LogicMaze {
         
         playerPos = newPosition
         
+        steps += 1
+        
+        // Checking for letter
+        if newNode.letter != -1 {
+            
+            let index = word.index(word.startIndex, offsetBy: newNode.letter)
+            lettersFound[newNode.letter] = word[index]
+        }
+        //
+        
         func makeVisible(currNode: inout MazeNode, dist: Int, totDist: Int) {
             // Make visible
             currNode.visualized = true

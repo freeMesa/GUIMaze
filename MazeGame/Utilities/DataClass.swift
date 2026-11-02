@@ -32,7 +32,7 @@ struct MazeNode {
     // True if there is a wall in the direction
     var walls: [Directions: Bool] = [.north: true, .east: true, .south: true, .west: true]
     
-    var letters: [String] = []
+    var letter: Int = -1 // Index of the letter
     var pos: Position = Position(x: -1, y: -1)
     
     // Will mark it as false through the first pass of the maze generation
