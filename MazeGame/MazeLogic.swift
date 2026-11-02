@@ -120,12 +120,29 @@ class LogicMaze {
         
         playerPos = newPosition
         
-        func makeVisible(currNode: MazeNode, dist: Int, totDist: Int) {
+        func makeVisible(currNode: inout MazeNode, dist: Int, totDist: Int) {
             // Make visible
+            currNode.visualized = true
+            
+            if(dist >= totDist){
+                return
+            }
+            
+            for (dir, adder) in dirEncoding {
+                
+                if(!currNode.walls[dir]!) {
+                    
+                    var np = Position.addPositions(a: adder, b: currNode.pos)
+                    
+                    var newNode = maze[np.y][np.x]
+                    
+                    makeVisible(currNode: &newNode, dist: dist + 1, totDist: totDist)
+                }
+            }
             
         }
         
-        makeVisible()
+        makeVisible(currNode: &newNode, dist: 0, totDist: 2)
         
         return true
     }
