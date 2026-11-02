@@ -25,5 +25,12 @@ struct MazeGameTests {
         
         // TODO: Create two mazes and test that they are equivilent with the same seed
     }
+    
+    @Test("Testing movement.", arguments: [(-1, 1), (5, 5), (3, 2)])
+    func movementTest(x: Int, y: Int){
+        
+        // TODO: Create a prebaked maze of size 5x5
+        // TODO: Set player position
+    }
 
 }

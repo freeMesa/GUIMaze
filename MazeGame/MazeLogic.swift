@@ -10,13 +10,13 @@ import Foundation
 @Observable
 class LogicMaze {
     
-    var maze: [[MazeNode]] = []
-    var playerPos: Position = Position(x: -1, y: -1)
-    var isPlayerStart: Bool = true // @
-    var seed: Int // TODO: Initialize in init
+    private(set) var maze: [[MazeNode]] = []
+    private(set) var playerPos: Position = Position(x: -1, y: -1)
+    private(set) var isPlayerStart: Bool = true // @
+    private(set) var seed: Int // TODO: Initialize in init
     
-    var steps: Int = 0 // @
-    var lettersFound: [Character] = [] // TODO: Initialize in init
+    private(set) var steps: Int = 0 // @
+    private(set) var lettersFound: [Character] = [] // TODO: Initialize in init
     private var word: String = "" // TODO Initialize in init
     
     
