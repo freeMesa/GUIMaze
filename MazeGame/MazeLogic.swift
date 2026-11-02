@@ -171,9 +171,6 @@ class LogicMaze {
     }
     
     func reset(seed: Int){
-        // TODO: reset all values (mainly seed)
-        
-        // TODO; reset game state values
         
         self.maze = []
         self.playerPos = Position(x: -1, y: -1)

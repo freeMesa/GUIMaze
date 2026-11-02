@@ -8,7 +8,9 @@
 import Testing
 @testable import MazeGame
 
-struct MazeGameTests {
+@Suite("Maze Backend Tests")
+struct MazeTests {
+
 
     @Test("Making sure the maze is connected.", arguments: [256, 800, 1565, 10000234, 32473])
     func mazeSolvable(seed: Int) {
@@ -29,8 +31,51 @@ struct MazeGameTests {
     @Test("Testing movement.", arguments: [(-1, 1), (5, 5), (3, 2)])
     func movementTest(x: Int, y: Int){
         
-        // TODO: Create a prebaked maze of size 5x5
+        // TODO: Create a prebaked maze of size 5x5 random generate the walls
+        // Walls don't matter, as the movement is just checking whether the directional movement actually satisfies the condition
+        var prebakedMaze: [[MazeNode]] = (0..<5).map { rowIndex in // Blank maze
+            (0..<5).map { colIndex in
+                var node = MazeNode()
+                node.pos = Position(x: colIndex, y: 5 - rowIndex - 1)
+                return node
+            }
+        }
+        
+        
         // TODO: Set player position
+        
+        // TODO: Call move function foreach direction
+        // TODO: Check that the player is in the correct position
+        // TODO: Reset player position each time
+    }
+    
+    @Test("Testing the visualization pipeline.")
+    func nodeVisualization() {
+        
+        // TODO: Create a prebaked maze (actually this time) 5x5
+        var prebakedMaze: [[MazeNode]] = (0..<5).map { rowIndex in // Blank maze
+            (0..<5).map { colIndex in
+                var node = MazeNode()
+                node.pos = Position(x: colIndex, y: 5 - rowIndex - 1)
+                return node
+            }
+        }
+        // TODO: Define the nodes that should be visualized after move
+        // TODO: player move
+        // Check that it matches
+        
+        // TODO: Do this multiple times for the same maze differen positions nad moves
     }
 
+}
+
+@Suite("Utility Data Class Tests")
+struct DataClassTests {
+    
+    
+}
+
+@Suite("Random Generation Tests")
+struct RandomTest {
+    
 }
