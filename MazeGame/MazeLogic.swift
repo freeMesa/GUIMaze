@@ -10,12 +10,12 @@ import Foundation
 @Observable
 class LogicMaze {
     
-    var maze: [[MazeNode]] = [] // TODO: Initialize in init
+    var maze: [[MazeNode]] = []
     var playerPos: Position = Position(x: -1, y: -1)
-    var isPlayerStart: Bool = true
-    let seed: Int // TODO: Initialize in init
+    var isPlayerStart: Bool = true // @
+    var seed: Int // TODO: Initialize in init
     
-    var steps: Int = 0
+    var steps: Int = 0 // @
     var lettersFound: [Character] = [] // TODO: Initialize in init
     private var word: String = "" // TODO Initialize in init
     
@@ -34,8 +34,7 @@ class LogicMaze {
         self.generateMaze()
     }
     
-    private func generateMaze() {
-        // TODO: Backtracking algorithm
+    private func generateMaze() { // TODO: Utilize wordlist to generate word
         
         let size = rndGen.nextRange(min: 16, max: 20) // Can define these later
         
@@ -49,7 +48,6 @@ class LogicMaze {
             }
         }
         
-        // TODO: Backtracking algorithm
         var currX = rndGen.nextRange(min: 0, max: size - 1)
         var currY = rndGen.nextRange(min: 0, max: size - 1)
         
@@ -127,6 +125,8 @@ class LogicMaze {
             
             let index = word.index(word.startIndex, offsetBy: newNode.letter)
             lettersFound[newNode.letter] = word[index]
+            
+            newNode.letter = -1 // Removes it from the maze
         }
         //
         
@@ -180,6 +180,19 @@ class LogicMaze {
         // TODO: reset all values (mainly seed)
         
         // TODO; reset game state values
+        
+        self.maze = []
+        self.playerPos = Position(x: -1, y: -1)
+        self.isPlayerStart = true // @
+        self.seed = seed // TODO: Initialize in init
+        
+        self.steps = 0 // @
+        self.lettersFound = [] // TODO: Initialize in init
+        self.word = "" // TODO Initialize in init
+        
+        // @Deprecate most likely, and add a getter function for the nodes using relative coordinates
+        self.nodesToVisualize = [] // Treat it like a stack
+        self.rndGen = SeededRandomGenerator(seed: seed) // TODO: Initialize in init
         
         generateMaze()
     }
