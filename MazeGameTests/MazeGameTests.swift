@@ -10,7 +10,7 @@ import Testing
 
 @Suite("Maze Backend Tests")
 struct MazeTests {
-
+    
 
     @Test("Making sure the maze is connected.", arguments: [256, 800, 1565, 10000234, 32473])
     func mazeSolvable(seed: Int) {
@@ -22,6 +22,11 @@ struct MazeTests {
         // TODO: Test that all nodes are reachable
     }
     
+    @Test("Making sure the reset function works.", arguments: [256, 800, 1565, 1000234, 32473])
+    func resetMaze(seed: Int) {
+        
+    }
+    
     @Test("Testing the equivilence under same seeding.", arguments: [256, 800, 1565, 10000234, 32473])
     func mazeEquivilence(seed: Int) {
         
@@ -29,7 +34,7 @@ struct MazeTests {
     }
     
     @Test("Testing movement.", arguments: [(-1, 1), (5, 5), (3, 2)])
-    func movementTest(x: Int, y: Int){
+    func movementTest(x: Int, y: Int) {
         
         // TODO: Create a prebaked maze of size 5x5 random generate the walls
         // Walls don't matter, as the movement is just checking whether the directional movement actually satisfies the condition
@@ -40,6 +45,16 @@ struct MazeTests {
                 return node
             }
         }
+        
+        for i in 0..<5 {
+            for j in 0..<5 {
+                
+                for dir in Directions. {
+            }
+        }
+        
+        var maze = LogicMaze(seedInput: 20) // Seed is irrelevant
+        
         
         
         // TODO: Set player position
