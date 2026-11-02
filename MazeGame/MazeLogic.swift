@@ -57,10 +57,9 @@ class LogicMaze {
         currNode.visualized = false
         
         var stack: [MazeNode] = [currNode]
-        var nextNode: MazeNode
+        var nxtNode: MazeNode
         while(!stack.isEmpty){
-            let currNode: MazeNode! = stack.last
-            let nxtNode: MazeNode
+            currNode = stack.last!
             var newDirections: [Directions] = []
             
             for (dir, pos) in dirEncoding{
@@ -75,13 +74,21 @@ class LogicMaze {
             }
             
             if(newDirections.isEmpty){
-                stack.popLast()
+                stack.removeLast()
             } else {
                 let index = rndGen.nextRange(min: 0, max: newDirections.count)
                 let dir: Directions = newDirections[index]
                 
-                var nPos: Position! = Position.addPositions(a: dirEncoding[dir], b: currNode.pos)
+                var nPos: Position = Position.addPositions(a: dirEncoding[dir]!, b: currNode.pos)
                 
+                nxtNode = maze[nPos.y][nPos.x]
+                
+                currNode.walls[dir]! = false
+                nxtNode.walls[oppDirections[dir]!]! = false
+                
+                nxtNode.visualized = false
+                
+                stack.append(nxtNode)
             }
         }
     }
