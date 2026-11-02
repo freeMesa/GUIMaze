@@ -19,8 +19,7 @@ class LogicMaze {
     var lettersFound: [Character] = [] // TODO: Initialize in init
     private var word: String = "" // TODO Initialize in init
     
-    // @Deprecate most likely, and add a getter function for the nodes using relative coordinates
-    private var nodesToVisualize: [MazeNode] = [] // Treat it like a stack
+    
     private var rndGen: SeededRandomGenerator // TODO: Initialize in init
     
     init(seedInput: Int){
@@ -162,11 +161,6 @@ class LogicMaze {
         return x > c || y > c ? nil : maze[c - y - 1][x]
     }
     
-    // @Deprecated
-    private func getNextNode() -> MazeNode? { // Returns nil if the list is empty
-        return nodesToVisualize.popLast()
-    }
-    
     func isGuessAllowed() -> Bool {
         let c = maze.count
         return playerPos.x == c && playerPos.y == c // Top right corner
@@ -190,8 +184,6 @@ class LogicMaze {
         self.lettersFound = [] // TODO: Initialize in init
         self.word = "" // TODO Initialize in init
         
-        // @Deprecate most likely, and add a getter function for the nodes using relative coordinates
-        self.nodesToVisualize = [] // Treat it like a stack
         self.rndGen = SeededRandomGenerator(seed: seed) // TODO: Initialize in init
         
         generateMaze()
