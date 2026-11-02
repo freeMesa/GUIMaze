@@ -21,7 +21,7 @@ struct Position {
     var x: Int
     var y: Int
     
-    func addPositions(a: Position, b: Position) -> Position {
+    static func addPositions(a: Position, b: Position) -> Position {
         
         return Position(x: a.x + b.x, y: a.y + b.y)
     }

@@ -59,12 +59,39 @@ class LogicMaze {
         var stack: [MazeNode] = [currNode]
         var nextNode: MazeNode
         while(!stack.isEmpty){
-            let currPos: Position? = stack.last?.pos
+            let currNode: MazeNode! = stack.last
+            let nxtNode: MazeNode
             var newDirections: [Directions] = []
             
             for (dir, pos) in dirEncoding{
+                let newPos: Position = Position.addPositions(a: pos, b: currNode.pos)
+                var isNewDir: Bool = isInBounds(pos: newPos)
+                isNewDir = isNewDir && (maze[newPos.y][newPos.x].visualized)
+                
+                if(isNewDir){
+                    newDirections.append(dir)
+                }
                 
             }
+            
+            if(newDirections.isEmpty){
+                stack.popLast()
+            } else {
+                let index = rndGen.nextRange(min: 0, max: newDirections.count)
+                let dir: Directions = newDirections[index]
+                
+                var nPos: Position! = Position.addPositions(a: dirEncoding[dir], b: currNode.pos)
+                
+            }
+        }
+    }
+    
+    private func isInBounds(pos: Position) -> Bool {
+        let size = maze.count
+        if((pos.x >= size || pos.x < 0) || (pos.y >= size || pos.y < 0)){
+            return false
+        } else {
+            return true
         }
     }
     
