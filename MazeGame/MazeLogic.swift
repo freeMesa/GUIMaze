@@ -106,9 +106,23 @@ class LogicMaze {
         
         // TODO: Move logic
         // TODO: Make sure the move is doable
+        var newPosition: Position = Position.addPositions(a: playerPos, b: dirEncoding[dir]!)
         
-        func makeVisible() {
+        if(!isInBounds(pos: newPosition)){
+            return false
+        }
+        
+        var newNode: MazeNode = maze[newPosition.y][newPosition.x]
+        
+        if(newNode.walls[dir]!){
+            return false
+        }
+        
+        playerPos = newPosition
+        
+        func makeVisible(currNode: MazeNode, dist: Int, totDist: Int) {
             // Make visible
+            
         }
         
         makeVisible()
