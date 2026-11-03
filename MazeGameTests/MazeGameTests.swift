@@ -31,6 +31,7 @@ struct MazeTests {
     func mazeEquivilence(seed: Int) {
         
         // TODO: Create two mazes and test that they are equivilent with the same seed
+        
     }
     
     @Test("Testing movement.", arguments: [(-1, 1), (5, 5), (3, 2)])
@@ -49,9 +50,14 @@ struct MazeTests {
         for i in 0..<5 {
             for j in 0..<5 {
                 
-                for dir in Directions. {
+                for dir in Directions.allCases {
+                    var toggle = Bool.random()
+                    prebakedMaze[j][i].walls[dir]! = toggle
+                }
             }
         }
+        
+        prebakedMaze[prebakedMaze.count - 1][0].walls[.west] = false
         
         var maze = LogicMaze(seedInput: 20) // Seed is irrelevant
         
