@@ -35,11 +35,11 @@ class LogicMaze {
     
     private func generateMaze() { // TODO: Utilize wordlist to generate word
         
-        let size = rndGen.nextRange(min: 16, max: 20) // Can define these later
+        let size = Int.random(in: 16...20, using: &rndGen) // Can define these later
         
         self.playerPos = Position(x: -1, y: size - 1)
         
-        self.word = wordList[rndGen.nextRange(min: 0, max: wordList.count - 1)]
+        self.word = wordList[Int.random(in: 0..<wordList.count, using: &rndGen)]
         self.lettersFound = Array(repeating: "_", count: self.word.count)
         
         self.maze = (0..<size).map { rowIndex in // Blank maze
@@ -50,8 +50,8 @@ class LogicMaze {
             }
         }
         
-        var currX = rndGen.nextRange(min: 0, max: size - 1)
-        var currY = rndGen.nextRange(min: 0, max: size - 1)
+        var currX = Int.random(in: 0..<size, using: &rndGen)
+        var currY = Int.random(in: 0..<size, using: &rndGen)
         
         var currNode = self.maze[currY][currX]
         currNode.visualized = false
@@ -76,7 +76,7 @@ class LogicMaze {
             if(newDirections.isEmpty){
                 stack.removeLast()
             } else {
-                let index = rndGen.nextRange(min: 0, max: newDirections.count - 1)
+                let index = Int.random(in: 0..<newDirections.count, using: &rndGen)
                 let dir: Directions = newDirections[index]
                 
                 let nPos: Position = Position.addPositions(a: dirEncoding[dir]!, b: currNode.pos)
@@ -94,13 +94,15 @@ class LogicMaze {
         
         // Word list appending
         for index in 0..<self.word.count {
-            
-            var x = rndGen.nextRange(min: 0, max: self.maze.count - 1)
-            var y = rndGen.nextRange(min: 0, max: self.maze.count - 1)
+            let maxInd = self.maze.count - 1
+            var x = Int.random(in: 0...maxInd, using: &rndGen)
+            var y = Int.random(in: 0...maxInd, using: &rndGen)
             
             while(maze[y][x].letter != -1){
-                x = rndGen.nextRange(min: 0, max: self.maze.count)
-                y = rndGen.nextRange(min: 0, max: self.maze.count)
+                x = Int.random(in: 0...maxInd, using: &rndGen)
+                y = Int.random(in: 0...maxInd, using: &rndGen)
+                
+                print("x: \(x) y: \(y)")
             }
             
             maze[y][x].letter = index

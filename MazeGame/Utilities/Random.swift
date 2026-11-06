@@ -24,13 +24,4 @@ struct SeededRandomGenerator: RandomNumberGenerator {
         return state
     }
     
-    mutating func nextRange(min: Int, max: Int) -> Int { // Fix: bounds checking to safely convert from UInt
-        guard min <= max else { return min }
-        
-        let range = UInt64(max - min + 1)
-        let offset = next() % range
-        
-        // Not truly random but good enough
-        return min + Int(offset)
-    }
 }

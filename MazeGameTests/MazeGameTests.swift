@@ -84,59 +84,22 @@ struct MazeTests {
         
     }
     
-    @Test("Testing movement.", arguments: [(-1, 1), (5, 5), (3, 2)])
-    func movementTest(x: Int, y: Int) {
+    @Test("Testing movement.", arguments: [234, 3442, 1234832, 8, 25])
+    func startingMovement(seed: Int) {
         
         // TODO: Create a prebaked maze of size 5x5 random generate the walls
         // Walls don't matter, as the movement is just checking whether the directional movement actually satisfies the condition
-        var prebakedMaze: [[MazeNode]] = (0..<5).map { rowIndex in // Blank maze
-            (0..<5).map { colIndex in
-                var node = MazeNode()
-                node.pos = Position(x: colIndex, y: 5 - rowIndex - 1)
-                return node
-            }
-        }
+        let maze1 = LogicMaze(seedInput: seed)
         
-        for i in 0..<5 {
-            for j in 0..<5 {
-                
-                for dir in Directions.allCases {
-                    var toggle = Bool.random()
-                    prebakedMaze[j][i].walls[dir]! = toggle
-                }
-            }
-        }
+        #expect(!(maze1.move(dir: .north)))
+        #expect(!(maze1.move(dir: .north)))
         
-        prebakedMaze[prebakedMaze.count - 1][0].walls[.west] = false
+        #expect(maze1.move(dir: .east))
         
-        var maze = LogicMaze(seedInput: 20) // Seed is irrelevant
-        
-        
-        
-        // TODO: Set player position
-        
-        // TODO: Call move function foreach direction
-        // TODO: Check that the player is in the correct position
-        // TODO: Reset player position each time
-    }
+        #expect(!(maze1.move(dir: .west)))
     
-    @Test("Testing the visualization pipeline.")
-    func nodeVisualization() {
-        
-        // TODO: Create a prebaked maze (actually this time) 5x5
-        var prebakedMaze: [[MazeNode]] = (0..<5).map { rowIndex in // Blank maze
-            (0..<5).map { colIndex in
-                var node = MazeNode()
-                node.pos = Position(x: colIndex, y: 5 - rowIndex - 1)
-                return node
-            }
-        }
-        // TODO: Define the nodes that should be visualized after move
-        // TODO: player move
-        // Check that it matches
-        
-        // TODO: Do this multiple times for the same maze differen positions nad moves
     }
+
 
 }
 
@@ -188,7 +151,7 @@ struct DataClassTests {
 struct RandomTest {
     
     
-    @Test("Testing whether the random value is repeatable", arguments: [252, 2374, 8901, 38234, 34234434])
+    @Test("Testing whether the random value is repeatable", arguments: [252, 2374, 8901, 38234, 34234434, 5, 25])
     func seededReliability(seed: Int) {
         
         var rndFunc1 = SeededRandomGenerator(seed: seed)
@@ -200,6 +163,6 @@ struct RandomTest {
         
         #expect(rndFunc1.next() == rndFunc2.next())
         
-        #expect(rndFunc1.nextRange(min: 0, max: 100) == rndFunc2.nextRange(min: 0, max: 100))
+
     }
 }
