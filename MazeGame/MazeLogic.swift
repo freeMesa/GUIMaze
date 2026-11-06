@@ -39,6 +39,9 @@ class LogicMaze {
         
         self.playerPos = Position(x: -1, y: size - 1)
         
+        self.word = wordList[rndGen.nextRange(min: 0, max: wordList.count - 1)]
+        self.lettersFound = Array(repeating: "_", count: self.word.count)
+        
         self.maze = (0..<size).map { rowIndex in // Blank maze
             (0..<size).map { colIndex in
                 var node = MazeNode()
@@ -62,7 +65,7 @@ class LogicMaze {
             for (dir, pos) in dirEncoding{
                 let newPos: Position = Position.addPositions(a: pos, b: currNode.pos)
                 var isNewDir: Bool = isInBounds(pos: newPos)
-                isNewDir = isNewDir && (maze[newPos.y][newPos.x].visualized)
+                isNewDir = isNewDir && (maze[size - newPos.y - 1][newPos.x].visualized)
                 
                 if(isNewDir){
                     newDirections.append(dir)
@@ -73,24 +76,39 @@ class LogicMaze {
             if(newDirections.isEmpty){
                 stack.removeLast()
             } else {
-                let index = rndGen.nextRange(min: 0, max: newDirections.count)
+                let index = rndGen.nextRange(min: 0, max: newDirections.count - 1)
                 let dir: Directions = newDirections[index]
                 
-                var nPos: Position = Position.addPositions(a: dirEncoding[dir]!, b: currNode.pos)
+                let nPos: Position = Position.addPositions(a: dirEncoding[dir]!, b: currNode.pos)
                 
-                nxtNode = maze[nPos.y][nPos.x]
+                nxtNode = maze[size - nPos.y - 1][nPos.x]
                 
-                currNode.walls[dir]! = false
-                nxtNode.walls[oppDirections[dir]!]! = false
+                currNode.walls[dir] = false
+                nxtNode.walls[oppDirections[dir]!] = false
                 
                 nxtNode.visualized = false
                 
                 stack.append(nxtNode)
             }
         }
+        
+        // Word list appending
+        for index in 0..<self.word.count {
+            
+            var x = rndGen.nextRange(min: 0, max: self.maze.count - 1)
+            var y = rndGen.nextRange(min: 0, max: self.maze.count - 1)
+            
+            while(maze[y][x].letter != -1){
+                x = rndGen.nextRange(min: 0, max: self.maze.count)
+                y = rndGen.nextRange(min: 0, max: self.maze.count)
+            }
+            
+            maze[y][x].letter = index
+            
+        }
     }
     
-    private func isInBounds(pos: Position) -> Bool {
+    func isInBounds(pos: Position) -> Bool {
         let size = maze.count
         if((pos.x >= size || pos.x < 0) || (pos.y >= size || pos.y < 0)){
             return false
@@ -129,7 +147,7 @@ class LogicMaze {
         }
         //
         
-        func makeVisible(currNode: inout MazeNode, dist: Int, totDist: Int) {
+        func makeVisible(currNode: MazeNode, dist: Int, totDist: Int, visitedInCurrentPath: Set<Position>) {
             // Make visible
             currNode.visualized = true
             
@@ -137,33 +155,33 @@ class LogicMaze {
                 return
             }
             
+            var currentPath = visitedInCurrentPath
+            currentPath.insert(currNode.pos)
             for (dir, adder) in dirEncoding {
                 
                 if(!currNode.walls[dir]!) {
                     
                     var np = Position.addPositions(a: adder, b: currNode.pos)
+                    if(isInBounds(pos: np) && !currentPath.contains(np)){
+                        var newNode = maze[np.y][np.x]
+                        
+                        makeVisible(currNode: newNode, dist: dist + 1, totDist: totDist, visitedInCurrentPath: currentPath)
+                    }
                     
-                    var newNode = maze[np.y][np.x]
-                    
-                    makeVisible(currNode: &newNode, dist: dist + 1, totDist: totDist)
                 }
             }
             
         }
         
-        makeVisible(currNode: &newNode, dist: 0, totDist: 2)
+        makeVisible(currNode: newNode, dist: 0, totDist: 2, visitedInCurrentPath: Set<Position>())
         
         return true
     }
     
-    func getNode(x: Int, y: Int) -> MazeNode? {
-        let c = maze.count
-        return x > c || y > c ? nil : maze[c - y - 1][x]
-    }
-    
+    // Treating the top left as the origin: (0, 0)
     func isGuessAllowed() -> Bool {
-        let c = maze.count
-        return playerPos.x == c && playerPos.y == c // Top right corner
+        let c = maze.count - 1
+        return playerPos.x == c && playerPos.y == 0 // Top right corner
     }
     
     func guessPassword(guess: String) -> Bool {
@@ -184,5 +202,26 @@ class LogicMaze {
         self.rndGen = SeededRandomGenerator(seed: seed) // TODO: Initialize in init
         
         generateMaze()
+    }
+    
+    static func == (lhs: LogicMaze, rhs: LogicMaze) -> Bool {
+        
+        if(!(lhs.word == rhs.word)){
+            return false
+        }
+        
+        if(!(lhs.maze.count == rhs.maze.count)) {
+            return false
+        }
+        
+        for i in 0..<lhs.maze.count {
+            for j in 0..<lhs.maze.count {
+                if(!(lhs.maze[i][j] == rhs.maze[i][j])){
+                    return false
+                }
+            }
+        }
+        
+        return true
     }
 }

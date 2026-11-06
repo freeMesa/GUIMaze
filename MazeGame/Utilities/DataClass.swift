@@ -19,7 +19,7 @@ enum Directions : CaseIterable {
 }
 
 
-struct Position {
+struct Position: Equatable, Hashable {
     var x: Int
     var y: Int
     
@@ -29,7 +29,7 @@ struct Position {
     }
 }
 
-struct MazeNode {
+class MazeNode: Equatable {
     
     // True if there is a wall in the direction
     var walls: [Directions: Bool] = [.north: true, .east: true, .south: true, .west: true]
@@ -42,4 +42,9 @@ struct MazeNode {
     // Will manually set to false for the frontend nodes that aren't visualized yet
     var visualized: Bool = true
     
+    static func == (lhs: MazeNode, rhs: MazeNode) -> Bool {
+        
+        
+        return lhs.letter == rhs.letter && lhs.visualized == rhs.visualized && lhs.pos == rhs.pos && lhs.walls == rhs.walls
+    }
 }
