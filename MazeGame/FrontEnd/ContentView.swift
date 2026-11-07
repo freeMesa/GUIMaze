@@ -26,29 +26,77 @@ struct ParentView: View {
     }
 }
 
-extension GraphicsContext {
-    func drawMazeCell(walls: [Directions: Bool], pos: CGRect, path: Path){
+struct MazeWallsShape: Shape {
+    let maze: [[MazeNode]]
+    let cellSize: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        var completePath = Path()
         
-        // TODO: Define drawing of cell
+        for y in 0..<maze.count {
+            for x in 0..<maze.count {
+                addWalls(node: maze[y][x], x: x, y: y, to: &completePath)
+            }
+        }
+        
+        return completePath
+    }
+    
+    private func addWalls(node: MazeNode, x: Int, y: Int, to path: inout Path) {
+        
+        let originX = CGFloat(x) * cellSize
+        let originY = CGFloat(y) * cellSize
+        
+        var topLeft     = CGPoint(x: originX, y: originY)
+        var topRight    = CGPoint(x: originX + cellSize, y: originY)
+        var bottomLeft  = CGPoint(x: originX, y: originY + cellSize)
+        var bottomRight = CGPoint(x: originX + cellSize, y: originY + cellSize)
+        
+        if node.walls[.north]! {
+            path.move(to: topLeft)
+            path.addLine(to: topRight)
+        }
+        
+        
+        
+        
+        
+        if node.walls[.west]! {
+            path.move(to: bottomLeft)
+            path.addLine(to: topLeft)
+        }
+        
+        if x == maze.count - 1 && node.walls[.east]! {
+            path.move(to: bottomRight)
+            path.addLine(to: topRight)
+        }
+        
+        if y == maze.count - 1 && node.walls[.south]! {
+            path.move(to: bottomLeft)
+            path.addLine(to: bottomRight)
+        }
     }
 }
 
 struct StaticDetailView: View {
     @State private var volume = 0.5
     @State private var showSlider = false
+    
+    @State var mazeBackend = LogicMaze(seedInput: Int.random(in: 255...7897324))
     var body: some View {
             ZStack {
                 
                 Canvas { context, size in
-                    let gridSpacing: CGFloat = 30.0
-                    var path = Path()
                     
-                    let worldWidth: CGFloat = 1200
-                    let worldHeight: CGFloat = 1200
+                    let mazeSize = CGFloat(mazeBackend.maze.count)
+                    let cellSize = CGFloat(20)
+                    
+                    let worldWidth = mazeSize * cellSize + 100
+                    let worldHeight = mazeSize * (cellSize + 10)
                     
                     let scaleX = size.width / worldWidth
                     let scaleY = size.height / worldHeight
-                    let fitScale = min(scaleX, scaleY) - 0.05
+                    let fitScale = min(scaleX, scaleY)
                     
                     let remainingWidth = size.width - worldWidth * fitScale
                     let remainingHeight = size.height - worldHeight * fitScale
@@ -57,23 +105,15 @@ struct StaticDetailView: View {
                     
                     context.scaleBy(x: fitScale, y: fitScale)
                     
-                    // 1. Draw Vertical Lines
-                    for x in stride(from: 0, through: worldWidth, by: gridSpacing) {
-                        path.move(to: CGPoint(x: x, y: 0))
-                        path.addLine(to: CGPoint(x: x, y: worldHeight))
-                    }
+                    var mazeDraw: MazeWallsShape = MazeWallsShape(maze: mazeBackend.maze, cellSize: cellSize)
                     
-                    // 2. Draw Horizontal Lines
-                    for y in stride(from: 0, through: worldHeight, by: gridSpacing) {
-                        path.move(to: CGPoint(x: 0, y: y)) // Note: Ensure x is 0, y is y
-                        path.addLine(to: CGPoint(x: worldWidth, y: y))
-                    }
+                    var path = mazeDraw.path(in: CGRect())
                     
                     // 3. Render the full path onto the canvas context
                     context.stroke(
                         path,
                         with: .color(.black.opacity(0.4)),
-                        lineWidth: 1.0
+                        lineWidth: 2.0
                     )
                 }
                 .background(Color(.systemGray))

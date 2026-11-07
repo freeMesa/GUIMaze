@@ -65,7 +65,7 @@ class LogicMaze {
             for (dir, pos) in dirEncoding{
                 let newPos: Position = Position.addPositions(a: pos, b: currNode.pos)
                 var isNewDir: Bool = isInBounds(pos: newPos)
-                isNewDir = isNewDir && (maze[size - newPos.y - 1][newPos.x].visualized)
+                isNewDir = isNewDir && (maze[size - 1 - newPos.y][newPos.x].visualized)
                 
                 if(isNewDir){
                     newDirections.append(dir)
@@ -81,7 +81,7 @@ class LogicMaze {
                 
                 let nPos: Position = Position.addPositions(a: dirEncoding[dir]!, b: currNode.pos)
                 
-                nxtNode = maze[size - nPos.y - 1][nPos.x]
+                nxtNode = maze[size - 1 - nPos.y][nPos.x]
                 
                 currNode.walls[dir] = false
                 nxtNode.walls[oppDirections[dir]!] = false
