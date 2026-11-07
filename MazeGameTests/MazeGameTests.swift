@@ -23,6 +23,7 @@ struct MazeTests {
         // TODO: Test that all nodes are reachable
         let testMaze = LogicMaze(seedInput: seed)
         
+        print("Testing seed: \(seed), size: \(testMaze.maze.count)")
         
         let size = testMaze.maze.count
         #expect(size >= 16 && size <= 20)
@@ -56,6 +57,22 @@ struct MazeTests {
             
             // Total nodes in a square maze is size * size
         #expect(visited.count == (size * size))
+        var testVal = true
+        for i in 0..<testMaze.maze.count {
+            for j in 0..<testMaze.maze.count {
+                var alltrue = true
+                for dir in Directions.allCases {
+                    if(!testMaze.maze[i][j].walls[dir]!){
+                        alltrue = false
+                        break
+                    }
+                }
+                
+                if alltrue { testVal = false }
+            }
+        }
+        
+        #expect(testVal)
     }
     
     @Test("Making sure the reset function works.", arguments: [256, 800, 1565, 1000234, 32473])
